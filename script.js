@@ -1,79 +1,56 @@
 //your code here
-// 1. loadin/placing the first 5 images from images folder to the the screen
-let mainDiv = document.getElementById('main');
-for (let i = 1; i <= 5; i++) {
-    let img = document.createElement('img');
-    img.setAttribute('src', `images/${i}.jpeg`);
-    img.setAttribute('data-ns-img', i)
-    img.onclick = function (e) {
-        readCaptcha(this);
-    };
-    img.height = 100;
-    img.width = 100;
-    mainDiv.append(img);
-}
+var lastImage = document.getElementsByTagName("img")[5]
+var reset = document.getElementById('reset')
+var verify = document.getElementById('verify')
+var para = document.getElementById('para')
 
-// generate a random number between 1 and 5
-let n = Math.floor(Math.random() * 5) + 1;
-let img = document.createElement('img');
-img.setAttribute('src', `images/${n}.jpeg`);
-img.setAttribute('data-ns-img', n)
-img.height = 100;
-img.width = 100;
-img.onclick = function (e) {
-    readCaptcha(this);
-};
-mainDiv.append(img);
+let imgClass = ["img1", "img2", "img3", "img4", "img5"];
+let randomImage = Math.floor(Math.random() * imgClass.length);
+// console.log(imgClass[randomImage]);
+lastImage.className = imgClass[randomImage]
 
-let captcha = [];
-let flag = false;
-let click1 = 0;
-let click2 = 0;
-let verify = document.createElement('button');
-verify.innerHTML = 'Verify';
+var countImage = 0;
 
-let reset = document.createElement('button');
-reset.innerHTML = 'Reset';
-
-function readCaptcha(e) {
-    console.log(e.getAttribute('data-ns-img'));
-    // captcha.push(e.getAttribute('data-ns-img'));
-    // console.log(captcha);
-    if (flag != false)
-        click2 = e.getAttribute('data-ns-img');
-    else
-        click1 = e.getAttribute('data-ns-img');
-
-    // flag = true;
-    console.log(click1, click2);
-
-    if (click1 != 0 && flag == false && !mainDiv.contains(reset)) {
-
-        mainDiv.append(reset);
-        reset.onclick = resetCaptcha;
+function selectImage(i){
+    var tile = document.getElementsByTagName("img")[i]
+    tile.classList.add("selected")
+    countImage++
+    reset.style.display = 'inline-block'
+    // console.log(countImage)
+    if(countImage==2){
+        verify.style.display = 'inline-block'
     }
-    if (click1 != 0 && click2 != 0 && !mainDiv.contains(verify)) {
-        // let verify = document.createElement('button');
-        // verify.innerHTML = 'Verify';
-        mainDiv.append(verify);
-        verify.onclick = checkCaptcha;
-    }
-    flag = true;
-}
-
-//
-function checkCaptcha() {
-    if (click1 == click2) {
-        console.log('verified');
-    }
-    else {
-        console.log('not verified');
+    else{
+        verify.style.display = 'none'
     }
 }
 
-function resetCaptcha() {
-    // location.reload();
-    click1 = 0;
-    click2 = 0;
-    flag = false;
+reset.onclick = function(){
+    var tile0 = document.getElementsByTagName('img')[0]
+    tile0.classList.remove('selected')
+    var tile1 = document.getElementsByTagName('img')[1]
+    tile1.classList.remove('selected')
+    var tile2 = document.getElementsByTagName('img')[2]
+    tile2.classList.remove('selected')
+    var tile3 = document.getElementsByTagName('img')[3]
+    tile3.classList.remove('selected')
+    var tile4 = document.getElementsByTagName('img')[4]
+    tile4.classList.remove('selected')
+    var tile5 = document.getElementsByTagName('img')[5]
+    tile5.classList.remove('selected')
+    countImage=0
+    reset.style.display = 'none'
+    para.innerText = ""
+    verify.style.display = 'none'
+}
+
+verify.onclick = function(){
+    var check1 = document.getElementsByClassName('selected')[0]
+    var check2 = document.getElementsByClassName('selected')[1]
+    if(check1.className == check2.className){
+        para.innerText = " You are a human. Congratulations! "
+    }
+    else{
+        para.innerText = " We can't verify you as a human. You selected the non-identical tiles."
+    }
 }
